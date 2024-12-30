@@ -41,7 +41,8 @@ From the HDL code given formulate the correct code  to divert the traffic to pa
 5.	For different input combinations generate the timing diagram
    
 **Program:**
-```Developed by: A PRANEYA
+```
+Developed by: A PRANEYA
  RegisterNumber:24900343
 ```
 
