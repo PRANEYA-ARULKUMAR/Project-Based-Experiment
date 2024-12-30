@@ -41,17 +41,94 @@ From the HDL code given formulate the correct code  to divert the traffic to pa
 5.	For different input combinations generate the timing diagram
    
 **Program:**
+```Developed by: A PRANEYA
+ RegisterNumber:24900343
+```
 
-/* Program to implement the given logic function and to verify its operations in quartus using Verilog programming. 
+```
+module traffic_light_controller (
+    input wire clk,         // Clock signal
+    input wire reset,       // Reset signal
+    output reg [2:0] MR1,   // Traffic lights for MR1: {Red, Yellow, Green}
+    output reg [2:0] MR2,   // Traffic lights for MR2: {Red, Yellow, Green}
+    output reg [2:0] MR3    // Traffic lights for MR3: {Red, Yellow, Green}
+);
 
-Developed by: RegisterNumber:*/
+    // State Encoding
+    parameter S00 = 2'b00, S01 = 2'b01, S10 = 2'b10, S11 = 2'b11;
+
+    reg [1:0] state;        // Current state
+    reg [3:0] count;        // Timer counter for each state
+
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            state <= S00;    // Initialize to state 00
+            count <= 0;      // Reset counter
+        end else begin
+            // State timer management
+            if (count < 9)
+                count <= count + 1;
+            else begin
+                count <= 0;
+                state <= state + 1; // Move to the next state
+            end
+        end
+    end
+
+    always @(state or count) begin
+        // Default signals: All red
+        MR1 = 3'b100;  // Red
+        MR2 = 3'b100;  // Red
+        MR3 = 3'b100;  // Red
+
+        case (state)
+            S00: begin
+                if (count < 5)
+                    MR1 = 3'b100; // Red
+                else
+                    MR1 = 3'b010; // Yellow
+            end
+
+            S01: begin
+                if (count < 5)
+                    MR1 = 3'b001; // Green
+                else begin
+                    MR1 = 3'b010; // Yellow
+                    MR2 = 3'b010; // Yellow
+                end
+            end
+
+            S10: begin
+                if (count < 5)
+                    MR2 = 3'b001; // Green
+                else begin
+                    MR2 = 3'b010; // Yellow
+                    MR3 = 3'b010; // Yellow
+                end
+            end
+
+            S11: begin
+                if (count < 5)
+                    MR3 = 3'b001; // Green
+                else
+                    MR3 = 3'b010; // Yellow
+            end
+        endcase
+    end
+endmodule
+```
 
 **RTL Schematic**
 
+![Screenshot 2024-12-23 220534](https://github.com/user-attachments/assets/d4f4ff25-00cc-49b8-833e-7674b7442265)
+
+
 **Output Timing Waveform**
+
+![Screenshot 2024-12-23 220729](https://github.com/user-attachments/assets/830cc4fa-b673-405f-881d-46851555e1a5)
 
 **Result:**
 
-
+Thus the Verilog code has been implemented successfully.
 
 
